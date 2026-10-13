@@ -103,14 +103,18 @@ export default class EntryAbility extends UIAbility {
     }
     try {
       // 全屏布局：窗口覆盖底部手势导航区，消除「最下面一条白色空白」。
-      target.setWindowLayoutFullScreen(true).catch((error: BusinessError) => {
+      // 必须等布局模式生效后再读安全区：非全屏时窗口不覆盖状态栏，TYPE_SYSTEM 的 topRect 是 0。
+      target.setWindowLayoutFullScreen(true).then(() => {
+        this.publishStatusBarInset(target);
+      }).catch((error: BusinessError) => {
         Log.warn('setWindowLayoutFullScreen failed', `code=${error.code} msg=${error.message}`);
+        this.publishStatusBarInset(target);
       });
     } catch (error) {
       const failure: BusinessError = error as BusinessError;
       Log.warn('setWindowLayoutFullScreen failed', `code=${failure.code} msg=${failure.message}`);
+      this.publishStatusBarInset(target);
     }
-    this.publishStatusBarInset(target);
     try {
       target.setWindowSystemBarProperties({
         statusBarContentColor: dark ? '#FFFFFF' : '#000000',
@@ -126,7 +130,7 @@ export default class EntryAbility extends UIAbility {
    * 把状态栏高度（vp）写进 AppStorage，供页面根容器做顶部内边距。
    * 全屏布局下窗口会画到状态栏下面，页面必须自己让出这一段，否则网页顶栏会被状态栏压住。
    */
-  private publishStatusBarInset(target: window.Window): void {
+  private publishStatusBarInset(target: window.Window, retry: boolean = true): void {
     let insetVp: number = 0;
     try {
       const avoid: window.AvoidArea = target.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM);
@@ -137,6 +141,13 @@ export default class EntryAbility extends UIAbility {
     } catch (error) {
       const failure: BusinessError = error as BusinessError;
       Log.warn('getWindowAvoidArea failed', `code=${failure.code} msg=${failure.message}`);
+    }
+    if (insetVp <= 0 && retry) {
+      // 布局模式切换后系统栏信息可能晚一帧才更新：稍后重读一次（只重试一次，避免死循环）。
+      setTimeout(() => {
+        this.publishStatusBarInset(target, false);
+      }, 300);
+      return;
     }
     AppStorage.setOrCreate(STATUS_BAR_INSET_KEY, insetVp);
     Log.info('status bar inset published', `${insetVp}vp`);

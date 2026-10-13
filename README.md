@@ -97,7 +97,7 @@ cd harmony
 & $hw assembleHap --mode module -p module=entry@ohosTest -p product=default --no-daemon  # 端侧测试包
 ```
 
-产物：`harmony/entry/build/default/outputs/default/entry-default-unsigned.hap`（当前 384,973 字节）。
+产物：`harmony/entry/build/default/outputs/default/entry-default-unsigned.hap`（当前 385,955 字节）。
 以输出中的 `BUILD SUCCESSFUL` 为准；PowerShell 会把 hvigor 的彩色输出当作错误流，`[exit code: 1]` 不代表构建失败。
 
 安装到模拟器（**未签名 HAP 可直接安装**）：

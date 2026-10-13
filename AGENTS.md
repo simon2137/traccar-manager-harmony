@@ -38,7 +38,7 @@ cd D:\dsh\Traccar\harmony
 
 - 以输出里的 `BUILD SUCCESSFUL` 为准；PowerShell 会把 hvigor 的彩色输出算成错误流，
   `[exit code: 1]` 不代表构建失败。
-- 产物 `entry\build\default\outputs\default\entry-default-unsigned.hap`（当前 384,973 字节，未签名）。
+- 产物 `entry\build\default\outputs\default\entry-default-unsigned.hap`（当前 385,955 字节，未签名）。
 - 模拟器（`Emulator.exe -start "Mate 90 Pro"`，HarmonyOS 7 / API 26，`127.0.0.1:5555`）
   **可直接 `hdc install -r` 未签名 HAP**：
   `hdc -t 127.0.0.1:5555 install -r <hap>`；启动 `aa force-stop org.traccar.manager` +
@@ -60,8 +60,8 @@ cd D:\dsh\Traccar\harmony
   新进程继续跑。
 - **不要加 `-noWindow`**：无窗口时模拟器拿不到 GL，直接以 `ErrorCode: 00801013`
   （二进制里的键名 `gpu_driver_not_support_cause`：宿主显卡驱动不满足 OpenGL 4.1）退出。
-- **当前阻塞（2026-10-13）**：带窗口启动时 guest 也只走到 `bootevent.bms.main.bundles.ready`，
-  `launcher.ready`/`wms.ready`/`account.ready` 始终不出现，`hdc list targets` 一直 `[Empty]`，
+- **当前阻塞（2026-10-13）**：带窗口启动时 guest 只走到 `bootevent.bms.main.bundles.ready`（重试时多到 `account.ready`），
+  `launcher.ready`/`wms.ready`/`lockscreen.ready` 始终不出现，`hdc list targets` 一直 `[Empty]`，
   约 60s 后 init 自己走 `StopAllServices` → `DoUmount /data` → 写 `/proc/sysrq-trigger` 触发
   `Kernel panic - not syncing: sysrq triggered crash`，模拟器随后 `quit emulator`。
   已排除：宿主内存（55.8GB 空闲）、快照损坏（删 `ram.img` 强制冷启动）、userdata 损坏（换全新 overlay 试过）、
