@@ -52,6 +52,8 @@
 - **令牌**：AssetStoreKit 存储，`alias + 可访问性` 查询；`authentication` 分支先走生物识别（60s 超时按未通过，绝不放行）。
 - **推送**：Push Kit 令牌回注 Web（`updateNotificationToken`），消息回注 `handleNativeNotification`；
   未接 AGC 时静默降级为空串，登录/下载/通知开关不受影响。
+- **窗口与安全区**：`setWindowLayoutFullScreen(true)` 让窗口铺到屏幕最下沿（非全屏时底部会留一条系统导航区白带），
+  再把状态栏高度写进 `AppStorage`，由页面根容器做顶部内边距，避免网页顶栏被状态栏压住；2in1 跳过系统栏 API。
 
 ## 3. 目录结构
 
@@ -95,7 +97,7 @@ cd harmony
 & $hw assembleHap --mode module -p module=entry@ohosTest -p product=default --no-daemon  # 端侧测试包
 ```
 
-产物：`harmony/entry/build/default/outputs/default/entry-default-unsigned.hap`（当前 380,686 字节）。
+产物：`harmony/entry/build/default/outputs/default/entry-default-unsigned.hap`（当前 384,973 字节）。
 以输出中的 `BUILD SUCCESSFUL` 为准；PowerShell 会把 hvigor 的彩色输出当作错误流，`[exit code: 1]` 不代表构建失败。
 
 安装到模拟器（**未签名 HAP 可直接安装**）：
@@ -139,6 +141,9 @@ hdc -t 127.0.0.1:5555 shell "aa start -a EntryAbility -b org.traccar.manager"
 - 上游的评分弹窗（`rate_my_app`）与 Firebase Analytics/Crashlytics 埋点没有对应实现。
 - 有意保留的差异（详见 [`PORT-REPORT.md`](PORT-REPORT.md) §2.5）：下载目录用应用缓存目录（`cacheDir`）、
   新增「下载后自动分享」开关、不使用内核自带错误页而用自绘错误屏。
+- **全屏布局这一改动尚未在设备上复验**：本机模拟器目前无法完成 guest 启动（宿主 GPU 驱动不满足 OpenGL 4.1，
+  模拟器报 `ErrorCode: 00801013 gpu_driver_not_support_cause`；带窗口启动时 guest 又卡在 UI 阶段、约 60s 后
+  被判定启动超时并 panic）。排查过程见 [`AGENTS.md`](AGENTS.md)。
 
 ## 8. 文档索引
 

@@ -38,7 +38,7 @@ cd D:\dsh\Traccar\harmony
 
 - 以输出里的 `BUILD SUCCESSFUL` 为准；PowerShell 会把 hvigor 的彩色输出算成错误流，
   `[exit code: 1]` 不代表构建失败。
-- 产物 `entry\build\default\outputs\default\entry-default-unsigned.hap`（当前 380,686 字节，未签名）。
+- 产物 `entry\build\default\outputs\default\entry-default-unsigned.hap`（当前 384,973 字节，未签名）。
 - 模拟器（`Emulator.exe -start "Mate 90 Pro"`，HarmonyOS 7 / API 26，`127.0.0.1:5555`）
   **可直接 `hdc install -r` 未签名 HAP**：
   `hdc -t 127.0.0.1:5555 install -r <hap>`；启动 `aa force-stop org.traccar.manager` +
@@ -46,6 +46,33 @@ cd D:\dsh\Traccar\harmony
 - 该模拟器实例大约每十几分钟会因 crash-client 心跳丢失被 `KillEmulator` 收走，且**不能用 harness
   后台 job 启动**（job 结束会把模拟器一起杀掉），要用 `Win32_Process.Create` 脱离 job 启动；
   验证要一次跑完。
+
+## 模拟器启动（2026-10-13 实测）
+
+- 实例目录是 **`<instancePath>/<name>`**，所以要传**父目录**：
+  `Emulator.exe -start "Mate 90 Pro" -instancePath "F:/Huawei" -imageRoot "F:/Huawei/Sdk"`
+  （传实例目录本身会报 `"Mate 90 Pro"  is not found. Please create the device(folder): "…/Mate 90 Pro/Mate 90 Pro"`）。
+- 设备名带空格时 `Start-Process -ArgumentList @('-start','Mate 90 Pro')` 会被拆成两个参数
+  （`Invalid command: please attach - or -- before the option!`），要传**单个字符串并在内部加引号**。
+- 启动器进程 ~15s 后自杀是**设计行为**，不是失败：`crash_server.log` 出现
+  `[CrashReportCommon.cpp(KillEmulator:28)]KillEmulator …` +
+  `[CrashReportServer.cpp(KillAndRebootBySnapshot:775)]Try to restart Emulator on new process get result  true`，
+  新进程继续跑。
+- **不要加 `-noWindow`**：无窗口时模拟器拿不到 GL，直接以 `ErrorCode: 00801013`
+  （二进制里的键名 `gpu_driver_not_support_cause`：宿主显卡驱动不满足 OpenGL 4.1）退出。
+- **当前阻塞（2026-10-13）**：带窗口启动时 guest 也只走到 `bootevent.bms.main.bundles.ready`，
+  `launcher.ready`/`wms.ready`/`account.ready` 始终不出现，`hdc list targets` 一直 `[Empty]`，
+  约 60s 后 init 自己走 `StopAllServices` → `DoUmount /data` → 写 `/proc/sysrq-trigger` 触发
+  `Kernel panic - not syncing: sysrq triggered crash`，模拟器随后 `quit emulator`。
+  已排除：宿主内存（55.8GB 空闲）、快照损坏（删 `ram.img` 强制冷启动）、userdata 损坏（换全新 overlay 试过）、
+  hdc 服务假死（`hdc kill`/`hdc start` 过）、bootMode（`-bootMode` 传非法值只回
+  `Command bootmode invalid! Use default.`，合法值取不到）。⇒ 怀疑是宿主图形栈问题
+  （这台机器是远程/串流环境：有 Parsec Virtual Display、MuMu Virtual Display、Tesla V100、Radeon 780M 四块适配器），
+  需从 DevEco Studio 的 Device Manager 启动、或整机重启/更新显卡驱动后再试。
+- `F:\Huawei\Mate 90 Pro\config.ini` 可改 `isHotBoot`（`false` 强制冷启动，默认 `true`）；健康的冷启动约 23s
+  （参考 2026-10-11 23:49 创建后的首次启动：镜像校验结束到 `Guest OS Boot Completed!!` 用 22.5s）。
+- 镜像校验很慢（`system.img` 约 33s），启动到能用大约 1 分钟；`Emulator.exe -help` 里有
+  `-instance <name> [-screenshot [-screenshotPath <path>]]` 等场景注入命令，可替代部分 hdc 操作。
 
 ## 取日志（关键经验）
 

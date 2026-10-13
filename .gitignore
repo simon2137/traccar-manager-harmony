@@ -24,6 +24,8 @@ build-*.txt
 shots/*.gz
 shots/*.json
 shots/*.txt
+shots/_*
+.dsh-file-attachment/
 tools/extra*.txt
 tools/t[0-9].txt
 tools/logout.txt

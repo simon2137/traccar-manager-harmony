@@ -1,9 +1,10 @@
 import { AbilityConstant, Configuration, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
-import { window } from '@kit.ArkUI';
+import { display, window } from '@kit.ArkUI';
 import { webview } from '@kit.ArkWeb';
 import { BusinessError, deviceInfo } from '@kit.BasicServicesKit';
 import { Log } from '../common/utils/Log';
 import { TraccarConstants } from '../common/constants/TraccarConstants';
+import { STATUS_BAR_INSET_KEY } from '../common/utils/Keys';
 import { DeepLinkRouter } from '../services/navigation/DeepLinkRouter';
 import { PushTokens } from '../services/notification/PushTokens';
 import { ServerPrefs } from '../services/storage/ServerPrefs';
@@ -19,8 +20,10 @@ const WINDOW_BACKGROUND_DARK: string = '#1A1C1E';
  * 应用入口：只做生命周期编排，深链交给 DeepLinkRouter 的单槽邮箱，
  * 页面在 aboutToAppear / @Watch 里消费。
  *
- * 窗口保持**非沉浸式**（上游 main.dart 只调 setSystemUIOverlayStyle 改状态栏图标明暗，
- * 没有全屏/自绘安全区），因此这里只跟随深浅色设置窗口底色与系统栏内容色。
+ * 窗口采用**全屏布局**（setWindowLayoutFullScreen(true)）：内容可以画到屏幕最下沿，
+ * 否则底部手势导航区会留出一条系统白带。代价是内容会钻进状态栏下面，
+ * 所以这里顺手把状态栏高度写进 AppStorage(STATUS_BAR_INSET_KEY)，页面根容器据此给顶部留白。
+ * 2in1 有系统窗口装饰（标题栏/最大化按钮），保持非全屏，不做上述处理。
  *
  * 顺序很重要：initializeWebEngine 必须早于任何 Web 组件创建（ArkDO 的同类做法），
  * 否则首个 Web 实例会退化到较慢的初始化路径。
@@ -94,10 +97,20 @@ export default class EntryAbility extends UIAbility {
       const failure: BusinessError = error as BusinessError;
       Log.warn('setWindowBackgroundColor failed', `code=${failure.code}`);
     }
-    // 2in1 不支持系统栏 API：跳过（编译期仍会有针对 2in1 的可用性提示）。
+    // 2in1 不支持系统栏 API、且有系统窗口装饰：跳过（编译期仍会有针对 2in1 的可用性提示）。
     if (deviceInfo.deviceType === '2in1') {
       return;
     }
+    try {
+      // 全屏布局：窗口覆盖底部手势导航区，消除「最下面一条白色空白」。
+      target.setWindowLayoutFullScreen(true).catch((error: BusinessError) => {
+        Log.warn('setWindowLayoutFullScreen failed', `code=${error.code} msg=${error.message}`);
+      });
+    } catch (error) {
+      const failure: BusinessError = error as BusinessError;
+      Log.warn('setWindowLayoutFullScreen failed', `code=${failure.code} msg=${failure.message}`);
+    }
+    this.publishStatusBarInset(target);
     try {
       target.setWindowSystemBarProperties({
         statusBarContentColor: dark ? '#FFFFFF' : '#000000',
@@ -107,6 +120,26 @@ export default class EntryAbility extends UIAbility {
       const failure: BusinessError = error as BusinessError;
       Log.warn('setWindowSystemBarProperties failed', `code=${failure.code}`);
     }
+  }
+
+  /**
+   * 把状态栏高度（vp）写进 AppStorage，供页面根容器做顶部内边距。
+   * 全屏布局下窗口会画到状态栏下面，页面必须自己让出这一段，否则网页顶栏会被状态栏压住。
+   */
+  private publishStatusBarInset(target: window.Window): void {
+    let insetVp: number = 0;
+    try {
+      const avoid: window.AvoidArea = target.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM);
+      const density: number = display.getDefaultDisplaySync().densityPixels;
+      if (density > 0) {
+        insetVp = Math.round(avoid.topRect.height / density);
+      }
+    } catch (error) {
+      const failure: BusinessError = error as BusinessError;
+      Log.warn('getWindowAvoidArea failed', `code=${failure.code} msg=${failure.message}`);
+    }
+    AppStorage.setOrCreate(STATUS_BAR_INSET_KEY, insetVp);
+    Log.info('status bar inset published', `${insetVp}vp`);
   }
 
   private isDarkMode(): boolean {

@@ -8,7 +8,7 @@ import { UIContext } from '@kit.ArkUI';
 import { TraccarConstants } from '../common/constants/TraccarConstants';
 import { Log } from '../common/utils/Log';
 import { showToast } from '../common/utils/Toast';
-import { DEEP_LINK_TICK_KEY } from '../common/utils/Keys';
+import { DEEP_LINK_TICK_KEY, STATUS_BAR_INSET_KEY } from '../common/utils/Keys';
 import {
   buildUri,
   composeServerUrlFromDeepLink,
@@ -82,6 +82,12 @@ struct Index {
   @State loadingError: string = '';
 
   @StorageProp(DEEP_LINK_TICK_KEY) @Watch('onDeepLinkTick') deepLinkTick: number = 0;
+  /**
+   * 状态栏高度（vp），由 EntryAbility 在全屏布局后写入。
+   * 全屏布局让窗口画到屏幕最下沿（底部不再有系统白带），但内容会钻进状态栏下面，
+   * 所以根容器按这个值给顶部留白。
+   */
+  @StorageProp(STATUS_BAR_INSET_KEY) statusBarInsetVp: number = 0;
 
   aboutToAppear(): void {
     const context: common.UIAbilityContext = this.abilityContext();
@@ -140,6 +146,7 @@ struct Index {
     }
     .width('100%')
     .height('100%')
+    .padding({ top: this.statusBarInsetVp })
     .backgroundColor($r('app.color.surface'))
   }
 
