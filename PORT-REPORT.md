@@ -113,7 +113,9 @@ HarmonyOS 7（API 26）原生 ArkTS 应用，做多端适配，并落地鸿蒙 7
 界面与上游 1:1，因此多端适配落在窗口与系统栏这一层，同一份布局在手机 / 平板 / 2in1 通用：
 
 - `deviceTypes: ["phone", "tablet", "2in1"]`（测试模块同）；`Web` 宽高 100%，加载圈与错误页屏幕居中；
-- 不做沉浸式全屏，只设窗口底色 + 状态栏/导航条图标明暗（随系统深浅色，`onConfigurationUpdate` 同步）；
+- 窗口采用全屏布局（`setWindowLayoutFullScreen(true)`），让内容铺到屏幕最下沿（否则底部会露出系统导航区的白条）；
+  状态栏高度由 Ability 读 `getWindowAvoidArea(TYPE_SYSTEM)` 写进 AppStorage，页面根容器据此做顶部内边距
+  （对应上游 `SafeArea`），状态栏/导航条图标明暗随系统深浅色（`onConfigurationUpdate` 同步）；
 - 2in1 上跳过 `setWindowSystemBarProperties`（该 API 在 2in1 不可用），仅保留窗口底色；
 - 深浅色两套颜色资源（`resources/base` 与 `resources/dark` 同名同集合）；
 - 旋转 / 折叠 / 分屏 / 2in1 拖窗口都不重建页面（Web 是 build 树里的固定节点）。
@@ -131,6 +133,8 @@ HarmonyOS 7（API 26）原生 ArkTS 应用，做多端适配，并落地鸿蒙 7
 - 构建与单测：`assembleHap` 与 `hvigorw test` 均 `BUILD SUCCESSFUL`，23/23 通过；
 - 令牌与导出：`login|<token>` 落 AssetStoreKit（`token updated` / `login token stored`）；
   `download|<base64>` 落盘 13 字节并弹出系统分享面板（`shots/ui10.jpeg`，含本节下载目录缺陷的修复）。
+- 底部白条修复：全屏布局 + 顶部状态栏内边距，**2026-10-13 经用户在真机上确认有效**（此前的现象是窗口只铺到
+  系统手势导航区之上，最后约 15 个设备像素由系统画成白色）。
 
 **模拟器上两条曾被误判为失败的路径，已查清**：早先"`login|`/`download|` 无任何日志与落盘痕迹"的结论是
 **日志采集假象**——`hilog` 流式输出会丢行（连必然执行的 `bridge in` 都不出现），权威日志是设备上按分钟轮转的

@@ -69,6 +69,8 @@ cd D:\dsh\Traccar\harmony
   `Command bootmode invalid! Use default.`，合法值取不到）。⇒ 怀疑是宿主图形栈问题
   （这台机器是远程/串流环境：有 Parsec Virtual Display、MuMu Virtual Display、Tesla V100、Radeon 780M 四块适配器），
   需从 DevEco Studio 的 Device Manager 启动、或整机重启/更新显卡驱动后再试。
+  （该阻塞不影响已交付功能：窗口全屏布局/底部白条修复已于 2026-10-13 由用户在真机确认有效；
+  地图 WebGL 仍需真机验证。）
 - `F:\Huawei\Mate 90 Pro\config.ini` 可改 `isHotBoot`（`false` 强制冷启动，默认 `true`）；健康的冷启动约 23s
   （参考 2026-10-11 23:49 创建后的首次启动：镜像校验结束到 `Guest OS Boot Completed!!` 用 22.5s）。
 - 镜像校验很慢（`system.img` 约 33s），启动到能用大约 1 分钟；`Emulator.exe -help` 里有

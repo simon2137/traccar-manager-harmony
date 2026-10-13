@@ -141,9 +141,8 @@ hdc -t 127.0.0.1:5555 shell "aa start -a EntryAbility -b org.traccar.manager"
 - 上游的评分弹窗（`rate_my_app`）与 Firebase Analytics/Crashlytics 埋点没有对应实现。
 - 有意保留的差异（详见 [`PORT-REPORT.md`](PORT-REPORT.md) §2.5）：下载目录用应用缓存目录（`cacheDir`）、
   新增「下载后自动分享」开关、不使用内核自带错误页而用自绘错误屏。
-- **全屏布局这一改动尚未在设备上复验**：本机模拟器目前无法完成 guest 启动（宿主 GPU 驱动不满足 OpenGL 4.1，
-  模拟器报 `ErrorCode: 00801013 gpu_driver_not_support_cause`；带窗口启动时 guest 又卡在 UI 阶段、约 60s 后
-  被判定启动超时并 panic）。排查过程见 [`AGENTS.md`](AGENTS.md)。
+- 窗口全屏布局（消除底部白条）已在真机上确认有效；本机模拟器仍无法完成 guest 启动（宿主 GPU 驱动不满足
+  OpenGL 4.1，报 `ErrorCode: 00801013 gpu_driver_not_support_cause`），排查过程见 [`AGENTS.md`](AGENTS.md)。
 
 ## 8. 文档索引
 
