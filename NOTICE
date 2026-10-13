@@ -1,0 +1,12 @@
+Traccar Manager for HarmonyOS
+Copyright 2026 simon2137
+
+This product is a HarmonyOS (ArkTS / API 26) port of Traccar Manager,
+https://github.com/traccar/traccar-manager (commit af0bb3f), which is
+licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Derived from that project: the screen layout and three-state flow
+(loading -> error screen -> full-screen Web), navigation interception
+order, the `prefix|payload` JavaScript bridge protocol, the document-start
+injection script (including the Blob/xlsx download hook), the deep-link
+scheme `org.traccar.manager`, and the launcher icon artwork.
