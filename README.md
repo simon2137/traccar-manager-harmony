@@ -19,8 +19,7 @@
 本移植保持同一套「原生壳 + Web 前端」架构与同一套桥协议，因此：
 
 - 服务端仍是任意 Traccar（默认 `https://demo.traccar.org`，本项目测试用 `http://192.168.31.52:8082`）；
-- Web 侧不需要改动（`window.appInterface.postMessage('prefix|payload')` 契约不变）；
-- 界面与上游一致：**只有三态 —— 加载圈 → 错误屏 → 全屏 Web**，没有标题栏、没有自绘按钮、没有底部面板、没有宽屏分栏。
+- Web 侧不需要改动（`window.appInterface.postMessage('prefix|payload')` 契约不变）。
 
 | 上游 Flutter | 本工程（ArkTS / 系统能力） |
 | --- | --- |
@@ -34,21 +33,7 @@
 | `url_launcher` | `@ohos.app.ability.common` `startAbility`（外部浏览器） |
 | `http` | `@ohos.net.http`（带 `Authorization: Bearer <token>` 下载） |
 
-## 2. 界面（1:1 复刻上游）
-
-| 状态 | 截图 | 说明 |
-| --- | --- | --- |
-| 加载中 | — | 与上游 `main.dart` 相同：居中 `CircularProgressIndicator`，无任何文字/标题栏 |
-| 错误屏 | [`shots/ui3.jpeg`](shots/ui3.jpeg) | 对应 `error_screen.dart`：`cloud_off` 96vp + 内核错误文本（如 `ERR_TIMED_OUT`）+ M3 Outlined 地址输入框（预填当前地址）+ 框内右侧 ✓ |
-| 加载成功 | [`shots/ui1.jpeg`](shots/ui1.jpeg) | 全屏 Web，从状态栏下方直接铺满，**没有任何自绘控件** |
-| 提交换地址 | [`shots/ui4.jpeg`](shots/ui4.jpeg) | 错误屏点 ✓ → 重新装载 Web，页面从新地址加载成功 |
-| 键盘态 | [`shots/ui8.jpeg`](shots/ui8.jpeg) | 输入框内容随当前地址 `@Watch` 回填；`resizeToAvoidBottomInset: false` 等价处理 |
-| 导出分享 | [`shots/ui10.jpeg`](shots/ui10.jpeg) | 桥发来 `download\|<base64>` → 落盘 `report.xlsx` → 系统分享面板 |
-| 桌面图标 | [`shots/icon3.jpeg`](shots/icon3.jpeg) | 白底 + 藏青圆盘（layered icon），圆盘占画布 82%、占 tile 宽度 0.71 |
-
-主题取上游的 Material 3 `ColorScheme.fromSeed(Colors.blue)` 展开色；窗口底色与状态栏/导航条图标明暗跟随系统深浅色。
-
-## 3. HarmonyOS 侧的重点实现
+## 2. HarmonyOS 侧的重点实现
 
 - **桥注入时机**：`javaScriptOnDocumentStart` 注入脚本，先定义 `window.appInterface.postMessage`，
   原生代理未就绪时把消息压进 `__traccarMessageQueue`，`flutterInAppWebViewPlatformReady` 事件里补发；
@@ -64,7 +49,7 @@
 - **推送**：Push Kit 令牌回注 Web（`updateNotificationToken`），消息回注 `handleNativeNotification`；
   未接 AGC 时静默降级为空串，登录/下载/通知开关不受影响。
 
-## 4. 目录结构
+## 3. 目录结构
 
 ```
 Traccar/
@@ -92,7 +77,7 @@ Traccar/
 `upstream/`（上游 Flutter 源码，用于逐行对照）不入库，需要时自行克隆：
 `git clone https://github.com/traccar/traccar-manager.git`，本移植对齐的提交是 **`af0bb3f`**（2026-10-05）。
 
-## 5. 构建与运行
+## 4. 构建与运行
 
 前置：DevEco Studio（hvigor `modelVersion` 6.0.2）+ HarmonyOS SDK **API 26**（`compatibleSdkVersion` / `targetSdkVersion` = `26.0.0`）。
 
@@ -120,13 +105,13 @@ hdc -t 127.0.0.1:5555 shell "aa start -a EntryAbility -b org.traccar.manager"
 真机需要用自己的证书签名（`build-profile.json5` 的 `signingConfigs` 目前为空），
 也可以用 DevEco Studio 的 *Automatic signing* 生成。
 
-## 6. 测试
+## 5. 测试
 
 - **本地单测 23 例**（`entry/src/test`，hypium）：URL 规范化与后缀白名单、URI 解析/重建、注入脚本的队列与自环防护、桥协议契约。
 - **端侧测试**（`entry/src/ohosTest`）：打包为 `entry-ohosTest-unsigned.hap`。
 - **手工验收清单**见 [`harmony/README.md`](harmony/README.md) 第 6 节。
 
-## 7. 验证记录（HarmonyOS 7 模拟器，API 26，`Mate 90 Pro`）
+## 6. 验证记录（HarmonyOS 7 模拟器，API 26，`Mate 90 Pro`）
 
 | 项 | 证据 |
 | --- | --- |
@@ -138,7 +123,7 @@ hdc -t 127.0.0.1:5555 shell "aa start -a EntryAbility -b org.traccar.manager"
 | 生物识别 | 模拟器无录入凭据 → `user auth rejected \| code=12500010` → 按未通过处理并回注空令牌（预期行为） |
 | 桌面图标 | `shots/home1.jpeg` → `shots/icon3.jpeg`（圆盘由 tile 宽度 0.53 放大到 0.71） |
 
-## 8. 已知限制
+## 7. 已知限制
 
 - **模拟器没有 WebGL/WebGL2**（已定位到 guest 侧根因，应用层解决不了）：真实 Traccar Web 前端会停在自带 loader
   （`GPUInitializationError: WebGL2 is required to display this map`，见 `shots/ui11.jpeg`）。
@@ -154,7 +139,7 @@ hdc -t 127.0.0.1:5555 shell "aa start -a EntryAbility -b org.traccar.manager"
 - 有意保留的差异（详见 [`PORT-REPORT.md`](PORT-REPORT.md) §2.5）：下载目录用应用缓存目录（`cacheDir`）、
   新增「下载后自动分享」开关、不使用内核自带错误页而用自绘错误屏。
 
-## 9. 文档索引
+## 8. 文档索引
 
 | 文档 | 内容 |
 | --- | --- |
@@ -163,7 +148,7 @@ hdc -t 127.0.0.1:5555 shell "aa start -a EntryAbility -b org.traccar.manager"
 | [`AGENTS.md`](AGENTS.md) | 给后续会话的须知：测试服务器、构建/装机命令、日志取证方法、界面基线 |
 | [`API26_WHAT_IS_NEW.md`](API26_WHAT_IS_NEW.md) | API 26 新特性与本项目的取用情况 |
 
-## 10. 许可证与致谢
+## 9. 许可证与致谢
 
 本项目沿用上游的 **Apache-2.0**（见上游 `LICENSE.txt`），所有界面与交互设计均来自
 [traccar/traccar-manager](https://github.com/traccar/traccar-manager)（`af0bb3f`）与
