@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/icon.png" width="120" alt="Traccar Manager for HarmonyOS">
+</p>
+
 # Traccar Manager for HarmonyOS
 
 把 [traccar-manager](https://github.com/traccar/traccar-manager)（Flutter）移植成 **HarmonyOS 7 / API 26 原生 ArkTS 应用**，
