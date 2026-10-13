@@ -1,0 +1,34 @@
+# 上游 Flutter 源码：自行克隆（见 README §4），不入库
+upstream/
+
+# 鸿蒙构建产物与本地缓存
+harmony/**/build/
+harmony/.hvigor/
+harmony/**/.hvigor/
+harmony/oh_modules/
+harmony/**/oh_modules/
+harmony/.cxx/
+harmony/.idea/
+harmony/local.properties
+harmony/.clangd
+harmony/.appanalyzer
+harmony/.test
+**/agconnect-services.json
+
+# 调试/取证过程产生的临时文件
+hap-inspect/
+_sdk26.json
+_*.py
+_*.txt
+build-*.txt
+shots/*.gz
+shots/*.json
+shots/*.txt
+tools/extra*.txt
+tools/t[0-9].txt
+tools/logout.txt
+tools/reload.txt
+.dsh-hdc/
+__pycache__/
+*.pyc
+node_modules/

@@ -1,0 +1,22 @@
+2026-10-12T10:53:24.106Z listening on 0.0.0.0:9998
+2026-10-12T10:53:48.199Z GET / ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:53:48.789Z GET /report?kind=probe&text=native%3Dobject%20appInterface%3Dobject%20installed%3Dtrue ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:53:48.789Z REPORT kind=probe text=native=object appInterface=object installed=true
+2026-10-12T10:53:48.836Z GET /favicon.ico ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:53:48.840Z GET /favicon.ico ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:56:37.391Z GET / ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:56:37.843Z GET /report?kind=probe&text=native%3Dobject%20appInterface%3Dobject%20installed%3Dtrue ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:56:37.843Z REPORT kind=probe text=native=object appInterface=object installed=true
+2026-10-12T10:56:37.889Z GET /favicon.ico ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:56:37.897Z GET /favicon.ico ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:56:55.131Z GET /report?kind=handleLoginToken&text=%22%22 ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:56:55.132Z REPORT kind=handleLoginToken text=""
+2026-10-12T10:57:03.818Z GET /report?kind=handleLoginToken&text=%22%22 ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:57:03.818Z REPORT kind=handleLoginToken text=""
+2026-10-12T10:58:24.667Z GET / ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:58:25.050Z GET /report?kind=probe&text=native%3Dobject%20appInterface%3Dobject%20installed%3Dtrue ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:58:25.051Z REPORT kind=probe text=native=object appInterface=object installed=true
+2026-10-12T10:58:25.102Z GET /favicon.ico ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:58:25.111Z GET /favicon.ico ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:58:37.612Z GET /report?kind=handleLoginToken&text=%22%22 ua=Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chro
+2026-10-12T10:58:37.613Z REPORT kind=handleLoginToken text=""

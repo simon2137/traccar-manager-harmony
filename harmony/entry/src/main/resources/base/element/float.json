@@ -1,0 +1,12 @@
+{
+  "float": [
+    {
+      "name": "field_corner_radius",
+      "value": "4vp"
+    },
+    {
+      "name": "error_icon_size",
+      "value": "96vp"
+    }
+  ]
+}

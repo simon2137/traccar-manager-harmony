@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "Traccar Manager entry module"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Traccar Manager"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Traccar Manager"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "用于在地图上显示您的当前位置"
+    },
+    {
+      "name": "camera_permission_reason",
+      "value": "用于扫码或拍摄上传图片"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#F9F9FF"
+    },
+    {
+      "name": "surface",
+      "value": "#F9F9FF"
+    },
+    {
+      "name": "on_surface",
+      "value": "#1A1C1E"
+    },
+    {
+      "name": "surface_variant",
+      "value": "#DFE2EB"
+    },
+    {
+      "name": "on_surface_variant",
+      "value": "#43474E"
+    },
+    {
+      "name": "primary",
+      "value": "#00639B"
+    },
+    {
+      "name": "on_primary",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "outline",
+      "value": "#73777F"
+    },
+    {
+      "name": "outline_variant",
+      "value": "#C3C6CF"
+    },
+    {
+      "name": "error",
+      "value": "#BA1A1A"
+    },
+    {
+      "name": "on_error",
+      "value": "#FFFFFF"
+    }
+  ]
+}

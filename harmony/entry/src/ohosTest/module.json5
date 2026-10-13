@@ -1,0 +1,14 @@
+{
+  "module": {
+    "name": "entry_test",
+    "type": "feature",
+    // 与主模块保持一致：手机 / 平板 / 2in1 都要能跑通测试（多端适配的回归入口）。
+    "deviceTypes": [
+      "phone",
+      "tablet",
+      "2in1"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false
+  }
+}
