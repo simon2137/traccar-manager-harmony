@@ -1,6 +1,6 @@
 {
   "name": "entry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Traccar Manager 鸿蒙原生客户端的 entry 模块",
   "main": "",
   "author": "Traccar",

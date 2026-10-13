@@ -1,5 +1,9 @@
 /**
- * 与上游 Flutter 版本 (traccar-manager 6.1.2) 严格对齐的常量。
+ * 与上游 Flutter 版 traccar-manager 的 Web 端约定严格对齐的常量
+ * （上游 HEAD af0bb3f，app version 6.1.2+82）。
+ *
+ * 注意：移植版**自身**的版本号不在这里，见 AppScope/app.json5 的 versionName/versionCode
+ * （当前 1.0.1 / 10001，与 GitHub Release 的编号一致）。
  * 任何取值都不应在这里"顺手优化"，否则会破坏与 Traccar Web 端已有的约定。
  */
 export class TraccarConstants {

@@ -38,7 +38,10 @@ cd D:\dsh\Traccar\harmony
 
 - 以输出里的 `BUILD SUCCESSFUL` 为准；PowerShell 会把 hvigor 的彩色输出算成错误流，
   `[exit code: 1]` 不代表构建失败。
-- 产物 `entry\build\default\outputs\default\entry-default-unsigned.hap`（当前 385,955 字节，未签名）。
+- 产物 `entry\build\default\outputs\default\entry-default-unsigned.hap`（当前 385,961 字节，未签名）。
+- 版本号在 `harmony\AppScope\app.json5`：`versionName 1.0.1` / `versionCode 10001`（与 GitHub Release 编号一致）。
+  早期构建沿用上游 Flutter 的 `6.1.2` / `61020082`，因此在装过旧版的设备上要 `hdc install -r -d <hap>` 才允许降级安装。
+  改了 app.json5 后**必须清掉 `harmony\entry\build` 重新构建**，否则 `ets/sourceMaps.map` 会只写局部、HAP 少 ~92KB。
 - 模拟器（`Emulator.exe -start "Mate 90 Pro"`，HarmonyOS 7 / API 26，`127.0.0.1:5555`）
   **可直接 `hdc install -r` 未签名 HAP**：
   `hdc -t 127.0.0.1:5555 install -r <hap>`；启动 `aa force-stop org.traccar.manager` +

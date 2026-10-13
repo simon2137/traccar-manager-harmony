@@ -1,7 +1,7 @@
 {
   "modelVersion": "6.0.2",
   "name": "traccar-manager-harmony",
-  "version": "6.1.2",
+  "version": "1.0.1",
   "description": "Traccar Manager for HarmonyOS",
   "dependencies": {
   },

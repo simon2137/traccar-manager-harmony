@@ -290,7 +290,7 @@ job 结束会被一起杀掉（`crash_server.log` 里 `KillEmulator`），要用
   （沙箱 `preferences/traccar_manager_settings` 里 `<string key="url">…8899</string>`），
   `logout` 触发 cookie 清理，`authentication` 让原生在 23ms 后回调 `window.handleLoginToken("")`；
 - **原生 → JS**：注入脚本与 `javaScriptProxy` 双双生效（页面内探针 `native=object appInterface=object
-  installed=true`，UA 里带 `TraccarHarmony/6.1.2`）；
+  installed=true`，UA 里带 `TraccarManagerHarmony/1.0.1`）；
 - **模拟器限制**：真实 Traccar Web 前端因 `WebGL2 is required to display this map` 停在自带 loader
   （模拟器无 GPU/WebGL），因此壳层验证一律改用 `tools/testserver.mjs`（自带探针 + 8 个桥接按钮 +
   `/report` 回传），宿主侧用 `tools/cdp.mjs`（CDP over `hdc fport tcp:9224
@@ -312,8 +312,9 @@ job 结束会被一起杀掉（`crash_server.log` 里 `KillEmulator`），要用
     → `share panel shown | report.xlsx`；沙箱内确有
     `/data/app/el2/100/base/org.traccar.manager/haps/entry/cache/downloads/report.xlsx`（13 字节 = `hello,traccar`）；
     系统分享面板见 `shots/ui10.jpeg`（`report.xlsx 13 B` + 华为分享/复制/另存为/打印/添加到中转站）；
-  - 含此修复的 HAP 381,350 字节（10-12 18:56:27）；再经静态审查修正与图标重排后为当前
-    **380,686 字节**（10-12 19:16:10，`BUILD SUCCESSFUL`，单测 23 例全绿）。
+  - 含此修复的 HAP 381,350 字节（10-12 18:56:27）；再经静态审查修正、图标重排与窗口全屏布局后为当前
+    **385,961 字节**（10-13 14:49，`BUILD SUCCESSFUL`，单测 23 例全绿；应用版本已统一为
+    `versionName 1.0.1` / `versionCode 10001`，见 `AppScope/app.json5`）。
 - **`authentication`（读令牌 + 生物识别）在模拟器上的正确表现**：`user auth rejected | code=12500010`
   （`UserAuthResultCode.NOT_ENROLLED`，模拟器没有录入锁屏凭据）→ `biometric verification rejected` → 原生回
   `handleLoginToken("")`。真机录入指纹/人脸后应返回真实令牌，这条路径待真机确认。

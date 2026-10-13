@@ -60,7 +60,7 @@
 ```
 Traccar/
 ├── harmony/                       # 鸿蒙工程（用 DevEco Studio 打开这一层）
-│   ├── AppScope/app.json5         # bundleName org.traccar.manager，versionName 6.1.2
+│   ├── AppScope/app.json5         # bundleName org.traccar.manager，versionName 1.0.1 / versionCode 10001
 │   ├── entry/src/main/ets/        # 24 个 .ets / 2802 行
 │   │   ├── pages/Index.ets        # 三态 + Web + 桥回调 + 导航拦截
 │   │   ├── views/components/ErrorScreen.ets
@@ -97,8 +97,12 @@ cd harmony
 & $hw assembleHap --mode module -p module=entry@ohosTest -p product=default --no-daemon  # 端侧测试包
 ```
 
-产物：`harmony/entry/build/default/outputs/default/entry-default-unsigned.hap`（当前 385,955 字节）。
+产物：`harmony/entry/build/default/outputs/default/entry-default-unsigned.hap`（当前 385,961 字节）。
 以输出中的 `BUILD SUCCESSFUL` 为准；PowerShell 会把 hvigor 的彩色输出当作错误流，`[exit code: 1]` 不代表构建失败。
+
+版本号：应用自身版本（`harmony/AppScope/app.json5` 的 `versionName` / `versionCode`）与 Release 编号一致，
+当前为 **1.0.1 / 10001**——早期构建曾沿用上游 Flutter 的 `6.1.2`（`versionCode` 61020082），
+所以设备上如果装过那个版本，覆盖安装需要允许降级：`hdc install -r -d <hap>`（或先卸载再装）。
 
 安装到模拟器（**未签名 HAP 可直接安装**）：
 

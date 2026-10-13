@@ -32,7 +32,7 @@ export class WebSessionManager {
     try {
       if (WebSessionManager.userAgent.length === 0) {
         const base: string = controller.getUserAgent();
-        WebSessionManager.userAgent = `${base} TraccarManagerHarmony/6.1.2`;
+        WebSessionManager.userAgent = `${base} TraccarManagerHarmony/1.0.1`;
       }
       controller.setCustomUserAgent(WebSessionManager.userAgent);
     } catch (error) {

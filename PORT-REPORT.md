@@ -4,7 +4,8 @@
 HarmonyOS 7（API 26）原生 ArkTS 应用，做多端适配，并落地鸿蒙 7 的新特性，最后在本机构建出可分发的 HAP。
 
 **结论**：移植完成，`BUILD SUCCESSFUL`，产物
-`D:\dsh\Traccar\harmony\entry\build\default\outputs\default\entry-default-unsigned.hap`（381,350 字节，unsigned）；
+`D:\dsh\Traccar\harmony\entry\build\default\outputs\default\entry-default-unsigned.hap`（385,961 字节，unsigned，
+应用版本 1.0.1 / versionCode 10001）；
 纯逻辑层 23 个单元测试在本机直接跑通（无需设备）；界面按上游 Flutter 代码**1:1 复刻**（加载圈 / 错误页 /
 全屏 Web 三态，无自绘标题栏与面板）；并已在**本机 HarmonyOS 7（API 26）模拟器**上装机跑通、逐项截图验证。
 
