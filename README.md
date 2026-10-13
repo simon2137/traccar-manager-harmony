@@ -120,12 +120,9 @@ hdc -t 127.0.0.1:5555 shell "aa start -a EntryAbility -b org.traccar.manager"
 | 项 | 证据 |
 | --- | --- |
 | 装机与启动 | 未签名 HAP `install -r` 成功；`aa start` 后进程 `org.traccar.manager` + 渲染进程 |
-| 三态界面 | `shots/ui1.jpeg`（全屏 Web）、`shots/ui3.jpeg`（错误屏）、`shots/ui8.jpeg`（键盘态） |
-| 错误屏换地址 | 点 ✓ 后从新地址加载成功 `shots/ui4.jpeg` |
 | 桥与令牌 | 持久化日志：`bridge in` → `onLoginToken` → `token updated` → `login token stored` |
-| 导出下载 | `file written \| report.xlsx 13B` + `share panel shown`（`shots/ui10.jpeg`，沙箱内 13 字节文件） |
+| 导出下载 | `file written \| report.xlsx 13B` + `share panel shown`（沙箱内 13 字节文件） |
 | 生物识别 | 模拟器无录入凭据 → `user auth rejected \| code=12500010` → 按未通过处理并回注空令牌（预期行为） |
-| 桌面图标 | `shots/home1.jpeg` → `shots/icon3.jpeg`（圆盘由 tile 宽度 0.53 放大到 0.71） |
 
 ## 7. 已知限制
 
